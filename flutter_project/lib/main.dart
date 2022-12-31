@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/screen.dart';
+import 'package:flutter_project/start_up/login.dart';
 import 'package:flutter_project/time_line/time_line_page.dart';
 
 void main() {
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TimeLinePage(),
+      home: LoginPage(),
     );
   }
 }
