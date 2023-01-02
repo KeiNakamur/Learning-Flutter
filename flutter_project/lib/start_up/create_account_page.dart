@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/utils/authentification.dart';
+import 'package:flutter_project/utils/firestore/users.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../model/account.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({Key? key}) : super(key: key);
@@ -37,12 +40,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
   }
   //画像をfirebase Storageにアップロードする
-  Future<void> uploadImage(String uid) async {
+  Future<String> uploadImage(String uid) async {
     final FirebaseStorage storageInstance = FirebaseStorage.instance;
     final Reference ref = storageInstance.ref();
     await ref.child(uid).putFile(image!);
     //getDownloadUrl()で先ほどアップロードした写真のurlが取得できる
     String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
+    return downloadUrl;
   }
 
   @override
@@ -137,8 +141,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       //AuthenticationでのsingUp()でUserCredential型でユーザーを作成したので、
                       //resultの型がUserCredentialであれば、といった条件分岐
                       if(result is UserCredential){
-                        await uploadImage(result.user!.uid);
-                        Navigator.pop(context);
+                        String imagePath = await uploadImage(result.user!.uid);
+                        Account newAccount = Account(
+                          id: result.user!.uid,
+                          name: nameController.text,
+                          selfIntroduction: selfIntroductionController.text,
+                          imagepath: imagePath,
+                        );
+                        var _result = await UserFirestore.setUser(newAccount);
+                        if(_result == true){
+                          Navigator.pop(context);
+                        }
                       }
                     }
                   },

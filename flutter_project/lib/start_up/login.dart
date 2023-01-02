@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                   onPressed: () async {
                     //Authenticationで作成したemailSignIn()でログイン処理
-                    var result = await Authentification.emailSignIn(email: emailController.text, password: passwordController.text)
+                    var result = await Authentification.emailSignIn(email: emailController.text, password: passwordController.text);
                     if(result){
                       //ログインページを破棄した状態で画面遷移するので、pushReplacementを使用
                       Navigator.pushReplacement(

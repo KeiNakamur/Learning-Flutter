@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,8 +19,8 @@ class _AccountPageState extends State<AccountPage> {
     userId:"1",
     imagePath: "https://virment.com/images/2019/05/logo_lockup_flutter_horizontal.png",
     selfIntroduction: "23歳のエンジニア",
-    createdTime: DateTime.now(),
-    updatedTime: DateTime.now(),
+    createdTime: Timestamp.now(),
+    updatedTime: Timestamp.now(),
   );
 
   List<Post> postList =[

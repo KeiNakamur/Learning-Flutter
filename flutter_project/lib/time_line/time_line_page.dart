@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/time_line/post_page.dart';
 import 'package:intl/intl.dart';
@@ -19,8 +20,8 @@ class _TimeLinePageState extends State<TimeLinePage> {
     userId:"1",
     imagePath: "https://virment.com/images/2019/05/logo_lockup_flutter_horizontal.png",
     selfIntroduction: "ホゲホゲ",
-    createdTime: DateTime.now(),
-    updatedTime: DateTime.now(),
+    createdTime: Timestamp.now(),
+    updatedTime: Timestamp.now(),
   );
 
   List<Post> postList =[
