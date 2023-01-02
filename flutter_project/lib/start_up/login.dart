@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/screen.dart';
 import 'package:flutter_project/start_up/create_account_page.dart';
+import 'package:flutter_project/utils/authentification.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -69,13 +70,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 40),
               ElevatedButton(
-                  onPressed: (){
-                    //ログインページを破棄した状態で画面遷移するので、pushReplacementを使用
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Screen()));
-                  },
-                  child: Text("Emailでログイン"))
+                  onPressed: () async {
+                    //Authenticationで作成したemailSignIn()でログイン処理
+                    var result = await Authentification.emailSignIn(email: emailController.text, password: passwordController.text)
+                    if(result){
+                      //ログインページを破棄した状態で画面遷移するので、pushReplacementを使用
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Screen()));
+                      }
+                    },
+                  child: Text("Emailでログイン")),
             ],
           ),
         ),

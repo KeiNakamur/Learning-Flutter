@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project/utils/authentification.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -33,6 +36,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       });
     }
   }
+  //画像をfirebase Storageにアップロードする
+  Future<void> uploadImage(String uid) async {
+    final FirebaseStorage storageInstance = FirebaseStorage.instance;
+    final Reference ref = storageInstance.ref();
+    await ref.child(uid).putFile(image!);
+    //getDownloadUrl()で先ほどアップロードした写真のurlが取得できる
+    String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,13 +126,20 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               ),
               SizedBox(height:40),
               ElevatedButton(
-                  onPressed: (){
+                  onPressed: () async {
                     if(nameController.text.isNotEmpty &&
                     userIdController.text.isNotEmpty &&
                     selfIntroductionController.text.isNotEmpty &&
                     emailController.text.isNotEmpty &&
                     passwordController.text.isNotEmpty){
-                      Navigator.pop(context);
+                      //すべての項目に入力された際にsignUp()を行う
+                      var result = await Authentification.signUp(email: emailController.text, password: passwordController.text);
+                      //AuthenticationでのsingUp()でUserCredential型でユーザーを作成したので、
+                      //resultの型がUserCredentialであれば、といった条件分岐
+                      if(result is UserCredential){
+                        await uploadImage(result.user!.uid);
+                        Navigator.pop(context);
+                      }
                     }
                   },
                   child: Text("アカウント作成"))
