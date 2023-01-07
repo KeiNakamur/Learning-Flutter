@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_project/utils/authentification.dart';
 
 import '../../model/account.dart';
 
@@ -41,9 +42,12 @@ class UserFirestore{
         createdTime: data['created_time'],
         updatedTime: data['updated_time'],
       );
-
+      Authentification.myAccount = myAccount;
+      print("ユーザ情報取得完了");
+      return true;
     }on FirebaseException catch(e){
-
+      print("ユーザー情報取得エラー");
+      return false;
     }
   }
 }
